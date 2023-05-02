@@ -1,9 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const grid = document.querySelector('.grid')
-    let width = 10
-    let camino = []
-    let squares = []
-    let node = 0
+const grid = document.querySelector('.grid')
 
     class Node {
       constructor (val, priority) {
@@ -128,31 +123,36 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    function createBoard() {
+    // function createBoard() {
 
-        for(let i = 0; i < width*width; i++) {
-          Node = document.createElement('div')
-          Node.setAttribute('id', i)
-          Node.setAttribute("class", "node")
-          grid.appendChild(Node)
-          squares.push(Node)
+    //     for(let i = 0; i < width*width; i++) {
+    //       Node = document.createElement('div')
+    //       Node.setAttribute('id', i)
+    //       Node.setAttribute("class", "node")
+    //       grid.appendChild(Node)
+    //       squares.push(Node)
     
-          // node.addEventListener('click', function(e) {
-          //   click(node)
-          //})
+    //       // node.addEventListener('click', function(e) {
+    //       //   click(node)
+    //       //})
     
-          node.oncontextmenu = function(e) {
-            e.preventDefault()
-          }
-        }
-      }
+    //       node.oncontextmenu = function(e) {
+    //         e.preventDefault()
+    //       }
+    //     }
+    //   }
     
 
-createBoard()
+
 var graph = new WeightedGraph();
 
 for (let i = 0; i < 100; i++) {
   graph.addVertex(i.toString());
+  const square = document.createElement('div')
+  square.setAttribute("id", i)
+  grid.appendChild(square)
+
+
 }
 
 for (let i = 0; i < 100; i++) {
@@ -169,5 +169,4 @@ for (let i = 0; i < 100; i++) {
     graph.addEdge(i.toString(), (i + 10).toString(), 1);
   }
 }
-console.log(graph.Dijkstra("57", "83"));
-})
+console.log(graph.Dijkstra("1", "99"));
