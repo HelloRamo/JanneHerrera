@@ -1,15 +1,63 @@
-//Dijkstra algorithm is used to find the shortest distance between two nodes inside a valid weighted graph. Often used in Google Maps, Network Router etc.
+let start = null;
+let end = null;
+document.addEventListener("DOMContentLoaded", () => {
+  const grid = document.querySelector(".grid");
+  let squares = [];
+  let width = 10;
 
-//helper class for PriorityQueue
+  function createBoard() {
+    for (let i = 0; i < width * width; i++) {
+      const square = document.createElement("div");
+      square.setAttribute("id", i);
+      square.setAttribute("class", "node");
+      square.addEventListener("click", (e) => {
+        console.log({ e });
+        const nodoid = e.target.id;
+        if (!start) {
+          start = nodoid;
+          e.target.style.backgroundColor = "white";
+        } else if (start && !end) {
+          end = nodoid;
+          e.target.style.backgroundColor = "black";
+        }
+        if (start && end) {
+          drawDijkstra();
+        }
+      });
+      grid.appendChild(square);
+      squares.push(square);
+    }
+  }
+  createBoard();
+});
+const drawDijkstra = () => {
+  let camino = graph.Dijkstra(start, end);
+  console.log({ camino });
+
+  camino.nodosVisitados.forEach((nodo, index) => {
+    setTimeout(() => {
+      if (nodo != start && nodo != end) {
+        htmlnodo = document.getElementById(nodo);
+        htmlnodo.style.backgroundColor = "yellow";
+      }
+    }, index * 50);
+  });
+  camino.mascorto.forEach((nodo, index) => {
+    setTimeout(() => {
+      htmlnodo = document.getElementById(nodo);
+      htmlnodo.style.backgroundColor = "blue";
+    }, 50 * camino.nodosVisitados.length + index * 50);
+  });
+};
 class Node {
-  constructor (val, priority) {
+  constructor(val, priority) {
     this.val = val;
     this.priority = priority;
   }
 }
 
 class PriorityQueue {
-  constructor () {
+  constructor() {
     this.values = [];
   }
   enqueue(val, priority) {
@@ -74,7 +122,7 @@ class PriorityQueue {
 //Dijkstra's algorithm only works on a weighted graph.
 
 class WeightedGraph {
-  constructor () {
+  constructor() {
     this.adjacencyList = {};
   }
   addVertex(vertex) {
@@ -90,6 +138,8 @@ class WeightedGraph {
     const previous = {};
     let path = []; //to return at end
     let smallest;
+    let nodosVisitados = [];
+
     //build up initial state
     for (let vertex in this.adjacencyList) {
       if (vertex === start) {
@@ -116,6 +166,7 @@ class WeightedGraph {
       if (smallest || distances[smallest] !== Infinity) {
         for (let neighbor in this.adjacencyList[smallest]) {
           console.log("Visitado: ", smallest);
+          nodosVisitados.push(smallest);
           //find neighboring node
           let nextNode = this.adjacencyList[smallest][neighbor];
           //calculate new distance to neighboring node
@@ -132,14 +183,9 @@ class WeightedGraph {
         }
       }
     }
-    return path.concat(smallest).reverse();
+    return { mascorto: path.concat(smallest).reverse(), nodosVisitados };
   }
 }
-
-
-
-//EXAMPLES=====================================================================
-
 var graph = new WeightedGraph();
 
 for (let i = 0; i < 100; i++) {
@@ -153,34 +199,10 @@ for (let i = 0; i < 100; i++) {
   if (i % 10 !== 9) {
     graph.addEdge(i.toString(), (i + 1).toString(), 1);
   }
-  if ((i - 10) > 0) {
+  if (i - 10 > 0) {
     graph.addEdge(i.toString(), (i - 10).toString(), 1);
   }
-  if ((i + 10) < 100) {
+  if (i + 10 < 100) {
     graph.addEdge(i.toString(), (i + 10).toString(), 1);
   }
-} 
-
-// graph.addVertex("0");
-// graph.addVertex("1");
-// graph.addVertex("2");
-// graph.addVertex("3");
-// graph.addVertex("4");
-// graph.addVertex("5");
-
-// graph.addEdge("0", "1", 1);
-// graph.addEdge("0", "10", 1);
-// graph.addEdge("B", "E", 1);
-// graph.addEdge("C", "D", 1);
-// graph.addEdge("C", "F", 1);
-// graph.addEdge("D", "E", 1);
-// graph.addEdge("D", "F", 1);
-// graph.addEdge("E", "F", 1);
-
-console.log(graph.Dijkstra("57", "83"));
-let camino = graph.Dijkstra("57", "83")
-console.log({camino})
-camino.forEach((nodo)=>{
-  htmlnodo = document.getElementById(nodo)
-  htmlnodo.document
-})
+}
